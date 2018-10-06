@@ -12,7 +12,6 @@ mongoose.connect(config.database);
 mongoose.Promise = global.Promise;
 
 // Middleware
-app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(passport.initialize());

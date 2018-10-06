@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Playlist = require('../models/quiz');
+const QuizRoom = require('../models/room');
 const User = require('../models/user');
 const jwt = require('jwt-simple');
 const passport = require('passport');
@@ -22,10 +22,12 @@ router.post('/signup', function(req, res) {
             if (err) {
                 return res.status(400).send({success: false, msg: 'Username already exists.'});
             }
-            res.send({success: true, msg: 'Successful created new user.'});
+            res.send({success: true, msg: 'Successfully created new user.'});
         });
     }
 });
+
+
 
 router.post('/authenticate', function(req, res) {
     User.findOne({
@@ -51,36 +53,34 @@ router.post('/authenticate', function(req, res) {
     });
 });
 
-// Serve music urls from db
-router.get('/quiz-questions', (req, res) => {
+// ----- QuizRoom ROOM ROUTES (get, add, change, delete)-----
+router.get('/quiz-rooms', (req, res) => {
     let response = {
         type: 'GET',
     };
     res.send(response);
 });
 
-// Add playlist
-router.post('/quiz-questions', (req, res, next) => {
-    Playlist.create(req.body).then((playlist) => {
-        res.send(playlist);
+router.post('/quiz-rooms/add', (req, res, next) => {
+    QuizRoom.create(req.body).then((room) => {
+        res.send(room);
     }).catch(next);
 });
-
-// Change
-router.put('/quiz-questions/:id', (req, res, next) => {
-    Playlist.findByIdAndUpdate({_id: req.params.id}, req.body).then(() => {
-        Playlist.findOne({_id: req.params.id}).then((playlist) => {
-            res.send(playlist);
+router.put('/quiz-rooms/change/:id', (req, res, next) => {
+    QuizRoom.findByIdAndUpdate({_id: req.params.id}, req.body).then(() => {
+        Quiz.findOne({_id: req.params.id}).then((room) => {
+            res.send(room);
         })
     });
 });
 
-// Delete music url from db
-router.delete('/quiz-questions/:id', (req, res, next) => {
-    Playlist.findByIdAndRemove({_id: req.params.id}).then((playlist) => {
-        res.send(playlist);
+
+router.delete('/quiz-rooms/delete/:id', (req, res, next) => {
+    QuizRoom.findByIdAndRemove({_id: req.params.id}).then((room) => {
+        res.send(room);
     });
 });
+
 
 
 router.get('/memberinfo', passport.authenticate('jwt', { session: false}), function(req, res) {
