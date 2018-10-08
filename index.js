@@ -25,7 +25,7 @@ app.use((err, req, res, next) => {
 // pass passport for configuration
 require('./config/passport')(passport);
 
-
-app.listen(4000, () => {
+const  port = process.env.PORT || 8080;
+app.listen(port, () => {
     console.log("Listening for requests..");
 });
