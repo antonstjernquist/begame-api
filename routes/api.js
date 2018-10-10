@@ -8,6 +8,8 @@ const passport = require('passport');
 const secret = require('../config/database').secret;
 
 // Authentication
+
+
 router.post('/signup', function(req, res) {
     console.log(req.body);
     if (!req.body.name || !req.body.password) {

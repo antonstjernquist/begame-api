@@ -13,6 +13,11 @@ mongoose.Promise = global.Promise;
 
 // Middleware
 app.use(bodyParser.json());
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.use(morgan('dev'));
 app.use(passport.initialize());
 app.use('/api', routes);
