@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const QuizRoom = require('../models/room');
 const User = require('../models/user');
+const QuizCollection = require('../models/quizCollection');
 const jwt = require('jwt-simple');
 const passport = require('passport');
 
@@ -114,6 +115,64 @@ router.get('/memberinfo', passport.authenticate('jwt', { session: false}), funct
         }
     });
 });
+
+
+// retrive
+router.get('/quiz-collection/:id', passport.authenticate('jwt', { session: false}), function(req, res) {
+  QuizCollection.find({req.params.id}).then((result) => {
+    res.send(result);
+  })
+});
+
+// add
+router.post('/quiz-collection', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+    authCheck(req, (passed) => {
+        if (passed) {
+            QuizCollection.create(req.body).then((collection) => {
+                res.send({
+                    added: true,
+                    collection
+                });
+            }).catch(next);
+        } else {
+            res.status(403).send({success: false, msg: 'Unauthorized'});
+        }
+    });
+});
+
+// update
+router.put('/quiz-collection/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+    authCheck(req, (passed) => {
+        if (passed) {
+            QuizCollection.findByIdAndUpdate({_id: req.params.id, req.body}).then((collection) => {
+                res.send({
+                    added: true,
+                    collection
+                });
+            }).catch(next);
+        } else {
+            res.status(403).send({success: false, msg: 'Unauthorized'});
+        }
+    });
+});
+
+
+// delete
+router.delete('/quiz-collection/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+    authCheck(req, (passed) => {
+        if (passed) {
+            QuizCollection.findByIdAndRemove({_id: req.params.id}).then((collection) => {
+                res.send({
+                    deleted: true,
+                    collection
+                });
+            });
+        } else {
+            res.status(403).send({success: false, msg: 'Unauthorized'});
+        }
+    });
+});
+
 
 const authCheck = (req, callback) => {
     const token = getToken(req.headers);
