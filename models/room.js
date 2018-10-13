@@ -15,6 +15,7 @@ const RoomSchema = new Schema({
         type: String,
         required: [true, 'Name field is required'],
     },
+    created: Number,
     currentQuestion: Number,
     active: {
         type: Boolean,
@@ -25,10 +26,7 @@ const RoomSchema = new Schema({
         required: [true, 'flag is required'],
     }
     quiz: Object,
-
-},
-  {timestamps: true}
-);
+});
 
 const Room = mongoose.model('Room', RoomSchema);
 
