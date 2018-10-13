@@ -24,7 +24,7 @@ const RoomSchema = new Schema({
     openForAnswer: {
         type: Boolean,
         required: [true, 'flag is required'],
-    }
+    },
     quiz: Object,
 });
 
