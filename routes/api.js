@@ -127,9 +127,17 @@ router.get('/memberinfo', passport.authenticate('jwt', { session: false}), funct
 
 // retrive
 router.get('/quiz-collection', passport.authenticate('jwt', { session: false}), function(req, res) {
-  QuestionColection.find({}).then((result) => {
-    res.send(result);
-  })
+    authCheck(req, (passed) => {
+        if (passed) {
+            QuestionColection.find({}).then((result) => {
+              res.send(result);
+          }).catch(next);
+        } else {
+            res.status(403).send({success: false, msg: 'Unauthorized'});
+        }
+    });
+
+  
 });
 
 // add
