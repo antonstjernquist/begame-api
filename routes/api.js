@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const QuizRoom = require('../models/room');
+const Room = require('../models/room');
 const User = require('../models/user');
-const QuizCollection = require('../models/quizCollection');
+const QuestionColection = require('../models/questionCollections');
+const ActiveUsers = requre('../models/activeUsers');
 const jwt = require('jwt-simple');
 const passport = require('passport');
 
@@ -56,17 +57,24 @@ router.post('/authenticate', function(req, res) {
     });
 });
 
-// ----- QuizRoom ROOM ROUTES (get, add, edit, delete)-----
-router.get('/quiz-rooms', (req, res) => {
-    QuizRoom.find({}).then((result) => {
+// ----- Room ROOM ROUTES (get, add, edit, delete)-----
+router.get('/rooms', (req, res) => {
+    Room.find({}).then((result) => {
         res.send(result);
     })
 });
 
-router.post('/quiz-rooms/add', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+// get specific room
+router.get('/rooms/:id', (req, res) => {
+    Room.find({ roomId: req.params.id }).then((result) => {
+        res.send(result);
+    })
+});
+
+router.post('/rooms/add', passport.authenticate('jwt', { session: false}), (req, res, next) => {
     authCheck(req, (passed) => {
         if (passed) {
-            QuizRoom.create(req.body).then((room) => {
+            Room.create(req.body).then((room) => {
                 res.send({
                     added: true,
                     room
@@ -77,10 +85,10 @@ router.post('/quiz-rooms/add', passport.authenticate('jwt', { session: false}), 
         }
     });
 });
-router.put('/quiz-rooms/edit/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+router.put('/rooms/edit/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
     authCheck(req, (passed) => {
         if (passed) {
-            QuizRoom.findByIdAndUpdate({_id: req.params.id}, req.body, {new: true}).then((updatedDoc) => {
+            Room.findByIdAndUpdate({_id: req.params.id}, req.body, {new: true}).then((updatedDoc) => {
                res.send(updatedDoc);
             });
         } else {
@@ -91,10 +99,10 @@ router.put('/quiz-rooms/edit/:id', passport.authenticate('jwt', { session: false
 });
 
 
-router.delete('/quiz-rooms/delete/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+router.delete('/rooms/delete/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
     authCheck(req, (passed) => {
         if (passed) {
-            QuizRoom.findByIdAndRemove({_id: req.params.id}).then((room) => {
+            Room.findByIdAndRemove({_id: req.params.id}).then((room) => {
                 res.send({
                     deleted: true,
                     room
@@ -118,17 +126,17 @@ router.get('/memberinfo', passport.authenticate('jwt', { session: false}), funct
 
 
 // retrive
-router.get('/quiz-collection/:id', passport.authenticate('jwt', { session: false}), function(req, res) {
-  QuizCollection.find({req.params.id}).then((result) => {
+router.get('/quiz-collection', passport.authenticate('jwt', { session: false}), function(req, res) {
+  QuestionColection.find({}).then((result) => {
     res.send(result);
   })
 });
 
 // add
-router.post('/quiz-collection', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+router.post('/quiz-collection/add', passport.authenticate('jwt', { session: false}), (req, res, next) => {
     authCheck(req, (passed) => {
         if (passed) {
-            QuizCollection.create(req.body).then((collection) => {
+            QuestionColection.create(req.body).then((collection) => {
                 res.send({
                     added: true,
                     collection
@@ -141,10 +149,10 @@ router.post('/quiz-collection', passport.authenticate('jwt', { session: false}),
 });
 
 // update
-router.put('/quiz-collection/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+router.put('/quiz-collection/update/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
     authCheck(req, (passed) => {
         if (passed) {
-            QuizCollection.findByIdAndUpdate({_id: req.params.id, req.body}).then((collection) => {
+            QuestionColection.findByIdAndUpdate({_id: req.params.id, req.body}).then((collection) => {
                 res.send({
                     added: true,
                     collection
@@ -158,10 +166,10 @@ router.put('/quiz-collection/:id', passport.authenticate('jwt', { session: false
 
 
 // delete
-router.delete('/quiz-collection/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+router.delete('/quiz-collection/delete/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
     authCheck(req, (passed) => {
         if (passed) {
-            QuizCollection.findByIdAndRemove({_id: req.params.id}).then((collection) => {
+            QuestionColection.findByIdAndRemove({_id: req.params.id}).then((collection) => {
                 res.send({
                     deleted: true,
                     collection
@@ -172,6 +180,39 @@ router.delete('/quiz-collection/:id', passport.authenticate('jwt', { session: fa
         }
     });
 });
+
+// ActivePLebs
+// get specific room
+router.get('/activeUsers/:id', (req, res) => {
+    ActiveUsers.find({ roomId: req.params.id }).then((result) => {
+        res.send(result);
+    })
+});
+router.post('/activeUsers/add', (req, res) => {
+    ActiveUsers.create(req.body).then((users) => {
+        res.send({
+            added: true,
+            users
+        });
+    }).catch(next);
+});
+router.put('/activeUsers/edit/:id', (req, res) => {
+    ActiveUsers.findByIdAndUpdate({_id: req.params.id, req.body}).then((users) => {
+        res.send({
+            added: true,
+            users
+        });
+    }).catch(next);
+});
+router.delete('/activeUsers/:id', (req, res) => {
+    ActiveUsers.findByIdAndRemove({_id: req.params.id}).then((users) => {
+        res.send({
+            deleted: true,
+            users
+        });
+    }).catch(next);
+});
+
 
 
 const authCheck = (req, callback) => {
@@ -202,5 +243,6 @@ const getToken = (headers) => {
         return null;
     }
 };
+
 
 module.exports = router;

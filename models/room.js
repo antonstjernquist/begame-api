@@ -7,20 +7,40 @@ const RoomSchema = new Schema({
         type: String,
         required: [true, 'Name field is required'],
     },
-    category: {
-      type: String,
-      required: [true, 'Category is required'],
+    roomId: {
+        type: String,
+        required: [true, 'Name field is required'],
     },
-    questions: [
-         {
-             question: String,
-             possibleAnswers: Array,
-             correctAnswer: String,
-         },
+    currentQuestion: Number,
+    active: {
+        type: Boolean,
+        required: [true, 'flag is required'],
+    }
+    questions: {
+        name: {
+            question: String,
+            possibleAnswers: Object,
+            correctAnswer: String,
+          },
+      }
 
-    ]
 });
 
 const Room = mongoose.model('Room', RoomSchema);
 
 module.exports = Room;
+
+
+
+
+ownerId(pin): null
+roomId(pin): null
+quiezId(pin): null
+currentQuestion(pin): 0
+started(pin): false
+stoped(pin): false
+ended(pin): false
+mats(pin): 2
+jonas(pin): 3
+
+http://localhost:3000/room/fex2
