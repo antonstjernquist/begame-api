@@ -115,9 +115,9 @@ router.delete('/rooms/delete/:id', passport.authenticate('jwt', { session: false
 });
 
 router.get('/memberinfo', passport.authenticate('jwt', { session: false}), function(req, res) {
-    authCheck(req, (what) => {
-        if (what) {
-         res.json({success:true});
+    authCheck(req, (passed) => {
+        if (passed) {
+             res.json({success:true});
         } else {
             res.status(403).send({success: false, msg: 'Unauthorized'});
         }
@@ -136,8 +136,6 @@ router.get('/quiz-collection', passport.authenticate('jwt', { session: false}), 
             res.status(403).send({success: false, msg: 'Unauthorized'});
         }
     });
-
-  
 });
 
 // add
@@ -223,7 +221,7 @@ router.delete('/activeUsers/:id', (req, res) => {
 
 
 
-const authCheck = (req, callback) => {
+function authCheck(req, callback){
     const token = getToken(req.headers);
     if (token) {
         const decoded = jwt.decode(token, secret);
@@ -239,7 +237,7 @@ const authCheck = (req, callback) => {
     }
 }
 
-const getToken = (headers) => {
+function getToken(headers) {
     if (headers && headers.authorization) {
         const parted = headers.authorization.split(' ');
         if (parted.length === 2) {
