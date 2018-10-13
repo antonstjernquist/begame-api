@@ -3,7 +3,7 @@ const router = express.Router();
 const Room = require('../models/room');
 const User = require('../models/user');
 const QuestionColection = require('../models/questionCollections');
-const ActiveUsers = requre('../models/activeUsers');
+const ActiveUsers = require('../models/activeUsers');
 const jwt = require('jwt-simple');
 const passport = require('passport');
 
@@ -152,7 +152,7 @@ router.post('/quiz-collection/add', passport.authenticate('jwt', { session: fals
 router.put('/quiz-collection/update/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
     authCheck(req, (passed) => {
         if (passed) {
-            QuestionColection.findByIdAndUpdate({_id: req.params.id, req.body}).then((collection) => {
+            QuestionColection.findByIdAndUpdate({_id: req.params.id}, req.body).then((collection) => {
                 res.send({
                     added: true,
                     collection
@@ -197,7 +197,7 @@ router.post('/activeUsers/add', (req, res) => {
     }).catch(next);
 });
 router.put('/activeUsers/edit/:id', (req, res) => {
-    ActiveUsers.findByIdAndUpdate({_id: req.params.id, req.body}).then((users) => {
+    ActiveUsers.findByIdAndUpdate({_id: req.params.id}, req.body).then((users) => {
         res.send({
             added: true,
             users

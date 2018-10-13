@@ -15,7 +15,7 @@ const RoomSchema = new Schema({
     active: {
         type: Boolean,
         required: [true, 'flag is required'],
-    }
+    },
     questions: {
         name: {
             question: String,
@@ -29,18 +29,3 @@ const RoomSchema = new Schema({
 const Room = mongoose.model('Room', RoomSchema);
 
 module.exports = Room;
-
-
-
-
-ownerId(pin): null
-roomId(pin): null
-quiezId(pin): null
-currentQuestion(pin): 0
-started(pin): false
-stoped(pin): false
-ended(pin): false
-mats(pin): 2
-jonas(pin): 3
-
-http://localhost:3000/room/fex2
