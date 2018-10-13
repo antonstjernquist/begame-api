@@ -60,14 +60,20 @@ router.post('/authenticate', function(req, res) {
 // ----- Room ROOM ROUTES (get, add, edit, delete)-----
 router.get('/rooms', (req, res) => {
     Room.find({}).then((result) => {
-        res.send(result);
+        res.send({
+            success: true,
+            content: result
+        });
     })
 });
 
 // get specific room
 router.get('/rooms/:id', (req, res) => {
     Room.find({ roomId: req.params.id }).then((result) => {
-        res.send(result);
+        res.send({
+            success: true,
+            content: result
+        });
     })
 });
 
@@ -76,8 +82,8 @@ router.post('/rooms/add', passport.authenticate('jwt', { session: false}), (req,
         if (passed) {
             Room.create(req.body).then((room) => {
                 res.send({
-                    added: true,
-                    room
+                    success: true,
+                    content: room
                 });
             }).catch(next);
         } else {
@@ -89,7 +95,10 @@ router.put('/rooms/edit/:id', passport.authenticate('jwt', { session: false}), (
     authCheck(req, (passed) => {
         if (passed) {
             Room.findByIdAndUpdate({_id: req.params.id}, req.body, {new: true}).then((updatedDoc) => {
-               res.send(updatedDoc);
+               res.send({
+                   success: true,
+                   content: updatedDoc
+               });
             });
         } else {
             res.status(403).send({success: false, msg: 'Unauthorized'});
@@ -104,8 +113,8 @@ router.delete('/rooms/delete/:id', passport.authenticate('jwt', { session: false
         if (passed) {
             Room.findByIdAndRemove({_id: req.params.id}).then((room) => {
                 res.send({
-                    deleted: true,
-                    room
+                    success: true,
+                    content: room
                 });
             });
         } else {
@@ -130,7 +139,10 @@ router.get('/question-collection', passport.authenticate('jwt', { session: false
     authCheck(req, (passed) => {
         if (passed) {
             QuestionColection.find({}).then((result) => {
-              res.send(result);
+              res.send({
+                  success: true,
+                  content: result
+              });
           }).catch(next);
         } else {
             res.status(403).send({success: false, msg: 'Unauthorized'});
@@ -144,8 +156,8 @@ router.post('/question-collection/add', passport.authenticate('jwt', { session: 
         if (passed) {
             QuestionColection.create(req.body).then((collection) => {
                 res.send({
-                    added: true,
-                    collection
+                    success: true,
+                    content: collection
                 });
             }).catch(next);
         } else {
@@ -160,8 +172,8 @@ router.put('/question-collection/update/:id', passport.authenticate('jwt', { ses
         if (passed) {
             QuestionColection.findByIdAndUpdate({_id: req.params.id}, req.body).then((collection) => {
                 res.send({
-                    added: true,
-                    collection
+                    success: true,
+                    content: collection
                 });
             }).catch(next);
         } else {
@@ -177,8 +189,8 @@ router.delete('/question-collection/delete/:id', passport.authenticate('jwt', { 
         if (passed) {
             QuestionColection.findByIdAndRemove({_id: req.params.id}).then((collection) => {
                 res.send({
-                    deleted: true,
-                    collection
+                    success: true,
+                    content: collection
                 });
             });
         } else {
@@ -191,30 +203,33 @@ router.delete('/question-collection/delete/:id', passport.authenticate('jwt', { 
 // get specific room
 router.get('/activeUsers/:id', (req, res, next) => {
     ActiveUsers.find({ roomId: req.params.id }).then((result) => {
-        res.send(result);
+        res.send({
+            success: true,
+            content: result
+        });
     })
 });
 router.post('/activeUsers/add', (req, res, next) => {
     ActiveUsers.create(req.body).then((users) => {
         res.send({
-            added: true,
-            users
+            success: true,
+            content: users
         });
     }).catch(next);
 });
 router.put('/activeUsers/edit/:id', (req, res, next) => {
     ActiveUsers.findByIdAndUpdate({_id: req.params.id}, req.body).then((users) => {
         res.send({
-            added: true,
-            users
+            success: true,
+            content: users
         });
     }).catch(next);
 });
 router.delete('/activeUsers/:id', (req, res, next) => {
     ActiveUsers.findByIdAndRemove({_id: req.params.id}).then((users) => {
         res.send({
-            deleted: true,
-            users
+            success: true,
+            content: users
         });
     }).catch(next);
 });
