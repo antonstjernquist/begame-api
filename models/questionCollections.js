@@ -7,6 +7,10 @@ const QuestionCollectionSchema = new Schema({
     type: String,
     required: [true, 'Title field is required'],
   },
+  category: {
+    type: String,
+    required: [true, 'Category is required'],
+  },
   imgUrl: {
     type: String,
     required: [true, 'Title field is required'],
@@ -15,17 +19,7 @@ const QuestionCollectionSchema = new Schema({
     type: String,
     required: [true, 'Title field is required'],
   },
-  category: {
-    type: String,
-    required: [true, 'Category is required'],
-  },
-  questions: {
-      name: {
-          question: String,
-          possibleAnswers: Object,
-          correctAnswer: String,
-        },
-    }
+  questions: Object,
 });
 
 module.exports = mongoose.model('QuestionCollection', QuestionCollectionSchema);
