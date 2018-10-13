@@ -114,7 +114,7 @@ router.delete('/rooms/delete/:id', passport.authenticate('jwt', { session: false
     });
 });
 
-router.get('/memberinfo', passport.authenticate('jwt', { session: false}), function(req, res) {
+router.get('/memberinfo', passport.authenticate('jwt', { session: false}), function(req, res, next) {
     authCheck(req, (passed) => {
         if (passed) {
              res.json({success:true});
@@ -126,7 +126,7 @@ router.get('/memberinfo', passport.authenticate('jwt', { session: false}), funct
 
 
 // retrive
-router.get('/quiz-collection', passport.authenticate('jwt', { session: false}), function(req, res) {
+router.get('/quiz-collection', passport.authenticate('jwt', { session: false}), function(req, res, next) {
     authCheck(req, (passed) => {
         if (passed) {
             QuestionColection.find({}).then((result) => {
@@ -189,12 +189,12 @@ router.delete('/quiz-collection/delete/:id', passport.authenticate('jwt', { sess
 
 // ActivePLebs
 // get specific room
-router.get('/activeUsers/:id', (req, res) => {
+router.get('/activeUsers/:id', (req, res, next) => {
     ActiveUsers.find({ roomId: req.params.id }).then((result) => {
         res.send(result);
     })
 });
-router.post('/activeUsers/add', (req, res) => {
+router.post('/activeUsers/add', (req, res, next) => {
     ActiveUsers.create(req.body).then((users) => {
         res.send({
             added: true,
@@ -202,7 +202,7 @@ router.post('/activeUsers/add', (req, res) => {
         });
     }).catch(next);
 });
-router.put('/activeUsers/edit/:id', (req, res) => {
+router.put('/activeUsers/edit/:id', (req, res, next) => {
     ActiveUsers.findByIdAndUpdate({_id: req.params.id}, req.body).then((users) => {
         res.send({
             added: true,
@@ -210,7 +210,7 @@ router.put('/activeUsers/edit/:id', (req, res) => {
         });
     }).catch(next);
 });
-router.delete('/activeUsers/:id', (req, res) => {
+router.delete('/activeUsers/:id', (req, res, next) => {
     ActiveUsers.findByIdAndRemove({_id: req.params.id}).then((users) => {
         res.send({
             deleted: true,
