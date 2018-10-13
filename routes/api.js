@@ -1,4 +1,4 @@
-const express = require('express');
+question-collectionconst express = require('express');
 const router = express.Router();
 const Room = require('../models/room');
 const User = require('../models/user');
@@ -126,7 +126,7 @@ router.get('/memberinfo', passport.authenticate('jwt', { session: false}), funct
 
 
 // retrive
-router.get('/quiz-collection', passport.authenticate('jwt', { session: false}), function(req, res, next) {
+router.get('/question-collection', passport.authenticate('jwt', { session: false}), function(req, res, next) {
     authCheck(req, (passed) => {
         if (passed) {
             QuestionColection.find({}).then((result) => {
@@ -139,7 +139,7 @@ router.get('/quiz-collection', passport.authenticate('jwt', { session: false}), 
 });
 
 // add
-router.post('/quiz-collection/add', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+router.post('/question-collection/add', passport.authenticate('jwt', { session: false}), (req, res, next) => {
     authCheck(req, (passed) => {
         if (passed) {
             QuestionColection.create(req.body).then((collection) => {
@@ -155,7 +155,7 @@ router.post('/quiz-collection/add', passport.authenticate('jwt', { session: fals
 });
 
 // update
-router.put('/quiz-collection/update/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+router.put('/question-collection/update/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
     authCheck(req, (passed) => {
         if (passed) {
             QuestionColection.findByIdAndUpdate({_id: req.params.id}, req.body).then((collection) => {
@@ -172,7 +172,7 @@ router.put('/quiz-collection/update/:id', passport.authenticate('jwt', { session
 
 
 // delete
-router.delete('/quiz-collection/delete/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
+router.delete('/question-collection/delete/:id', passport.authenticate('jwt', { session: false}), (req, res, next) => {
     authCheck(req, (passed) => {
         if (passed) {
             QuestionColection.findByIdAndRemove({_id: req.params.id}).then((collection) => {
