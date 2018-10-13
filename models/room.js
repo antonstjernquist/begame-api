@@ -16,13 +16,7 @@ const RoomSchema = new Schema({
         type: Boolean,
         required: [true, 'flag is required'],
     },
-    questions: {
-        name: {
-            question: String,
-            possibleAnswers: Object,
-            correctAnswer: String,
-          },
-      }
+    questions: Object,
 
 });
 
