@@ -220,6 +220,8 @@ router.post('/activeUsers/add', (req, res, next) => {
         });
     }).catch(next);
 });
+
+
 router.put('/activeUsers/edit/:id', (req, res, next) => {
     ActiveUsers.findByIdAndUpdate({_id: req.params.id}, req.body).then((users) => {
         res.send({
